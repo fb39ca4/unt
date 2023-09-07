@@ -176,7 +176,7 @@ using enforce_unit = typename std::enable_if<is_unit<T>::value, T>::type;
 
 template<typename DimSet, intmax_t ScaleExpNum, intmax_t ScaleExpDen>
 struct unit {
-    using type = unit<DimSet, ScaleExpNum, ScaleExpDen>;
+	using type = unit<DimSet, ScaleExpNum, ScaleExpDen>;
 
 	static_assert(ScaleExpDen != 0, "Exponent denominator must be nonzero.");
 	using log_10_scale_ratio = std::ratio<ScaleExpNum, ScaleExpDen>;
@@ -184,150 +184,150 @@ struct unit {
 
 	using dims = DimSet;
 
-    static constexpr double scale_factor = gcem::pow(10.0, static_cast<double>(ScaleExpNum) / static_cast<double>(ScaleExpDen));
+	static constexpr double scale_factor = gcem::pow(10.0, static_cast<double>(ScaleExpNum) / static_cast<double>(ScaleExpDen));
 
-    template<typename OtherUnit>
-    struct equal {
-        static constexpr bool value = std::is_same<type, typename OtherUnit::type>::value;
-    };
+	template<typename OtherUnit>
+	struct equal {
+		static constexpr bool value = std::is_same<type, typename OtherUnit::type>::value;
+	};
 
-    // template<typename OtherUnit>
-    // struct compatible {
-    //     static constexpr bool value = std::is_same<unit_t, std::remove_cv<OtherUnit>>::value;
-    // };
+	// template<typename OtherUnit>
+	// struct compatible {
+	//     static constexpr bool value = std::is_same<unit_t, std::remove_cv<OtherUnit>>::value;
+	// };
 
-    template<intmax_t ExpNum, intmax_t ExpDen = 1>
-    using scale = unit<
+	template<intmax_t ExpNum, intmax_t ExpDen = 1>
+	using scale = unit<
 		DimSet,
 		std::ratio_add<log_10_scale_ratio, std::ratio<ExpNum, ExpDen>>::num,
 		std::ratio_add<log_10_scale_ratio, std::ratio<ExpNum, ExpDen>>::den
 	>;
 
 	template<intmax_t ExpNum, intmax_t ExpDen = 1>
-    using power = unit<
+	using power = unit<
 		dim_set_pow<DimSet, ExpNum, ExpDen>,
 		std::ratio_multiply<log_10_scale_ratio, std::ratio<ExpNum, ExpDen>>::num,
 		std::ratio_multiply<log_10_scale_ratio, std::ratio<ExpNum, ExpDen>>::den
 	>;
 
-    template<typename OtherUnit>
-    using mul = unit<
+	template<typename OtherUnit>
+	using mul = unit<
 		dim_set_mul<dims, typename OtherUnit::dims>,
 		std::ratio_add<log_10_scale_ratio, typename OtherUnit::log_10_scale_ratio>::num,
 		std::ratio_add<log_10_scale_ratio, typename OtherUnit::log_10_scale_ratio>::den
 	>;
 
-    template<typename OtherUnit>
-    using div = mul<typename OtherUnit::template power<-1>>;
+	template<typename OtherUnit>
+	using div = mul<typename OtherUnit::template power<-1>>;
 
-    static constexpr type instance() {
-        return type();
-    }
+	static constexpr type instance() {
+		return type();
+	}
 
-    constexpr bool operator==(const type&) const {
-        return true;
-    }
-
-    template<typename OtherDimSet, intmax_t OtherNum, intmax_t OtherDen>
-    constexpr bool operator==(const unit<OtherDimSet, OtherNum, OtherDen>&) const {
-        return false;
-    }
+	constexpr bool operator==(const type&) const {
+		return true;
+	}
 
 	template<typename OtherDimSet, intmax_t OtherNum, intmax_t OtherDen>
-    constexpr bool operator!=(const unit<OtherDimSet, OtherNum, OtherDen>& rhs) const {
-        return !operator==(rhs);
-    }
+	constexpr bool operator==(const unit<OtherDimSet, OtherNum, OtherDen>&) const {
+		return false;
+	}
 
 	template<typename OtherDimSet, intmax_t OtherNum, intmax_t OtherDen>
-    constexpr mul<unit<OtherDimSet, OtherNum, OtherDen>> operator*(const unit<OtherDimSet, OtherNum, OtherDen>&) const {
-        return mul<unit<OtherDimSet, OtherNum, OtherDen>>::instance();
-    }
+	constexpr bool operator!=(const unit<OtherDimSet, OtherNum, OtherDen>& rhs) const {
+		return !operator==(rhs);
+	}
 
 	template<typename OtherDimSet, intmax_t OtherNum, intmax_t OtherDen>
-    constexpr div<unit<OtherDimSet, OtherNum, OtherDen>> operator/(const unit<OtherDimSet, OtherNum, OtherDen>&) const {
-        return div<unit<OtherDimSet, OtherNum, OtherDen>>::instance();
-    }
+	constexpr mul<unit<OtherDimSet, OtherNum, OtherDen>> operator*(const unit<OtherDimSet, OtherNum, OtherDen>&) const {
+		return mul<unit<OtherDimSet, OtherNum, OtherDen>>::instance();
+	}
 
-    template<intmax_t Num, intmax_t Den = 1>
-    constexpr static power<Num, Den> pow = power<Num, Den>::instance();
+	template<typename OtherDimSet, intmax_t OtherNum, intmax_t OtherDen>
+	constexpr div<unit<OtherDimSet, OtherNum, OtherDen>> operator/(const unit<OtherDimSet, OtherNum, OtherDen>&) const {
+		return div<unit<OtherDimSet, OtherNum, OtherDen>>::instance();
+	}
 
-    template<intmax_t Num, intmax_t Den = 1>
-    constexpr static scale<Num, Den> scl = scale<Num, Den>::instance();
+	template<intmax_t Num, intmax_t Den = 1>
+	constexpr static power<Num, Den> pow = power<Num, Den>::instance();
+
+	template<intmax_t Num, intmax_t Den = 1>
+	constexpr static scale<Num, Den> scl = scale<Num, Den>::instance();
 };
 
 template<typename Unit, typename ValueType = double>
 struct quantity {
 	using type = quantity<Unit, ValueType>;
-    using unit_t = Unit;
-    using value_t = ValueType;
+	using unit_t = Unit;
+	using value_t = ValueType;
 
-    const value_t value;
+	const value_t value;
 
-    constexpr quantity(value_t value) : value(value) {};
+	constexpr quantity(value_t value) : value(value) {};
 
-    constexpr quantity(const quantity& other) : value(other.value) {};
-
-    template<typename RHSUnit, typename RHSValueType>
-    constexpr bool operator==(const quantity<RHSUnit, RHSValueType>& rhs) const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
-        return value == rhs.value;
-    }
+	constexpr quantity(const quantity& other) : value(other.value) {};
 
 	template<typename RHSUnit, typename RHSValueType>
-    constexpr bool operator<(const quantity<RHSUnit, RHSValueType>& rhs) const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
-        return value < rhs.value;
-    }
+	constexpr bool operator==(const quantity<RHSUnit, RHSValueType>& rhs) const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
+		return value == rhs.value;
+	}
 
 	template<typename RHSUnit, typename RHSValueType>
-    constexpr bool operator>(const quantity<RHSUnit, RHSValueType>& rhs) const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
-        return value > rhs.value;
-    }
+	constexpr bool operator<(const quantity<RHSUnit, RHSValueType>& rhs) const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
+		return value < rhs.value;
+	}
 
 	template<typename RHSUnit, typename RHSValueType>
-    constexpr bool operator<=(const quantity<RHSUnit, RHSValueType>& rhs) const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
-        return value <= rhs.value;
-    }
+	constexpr bool operator>(const quantity<RHSUnit, RHSValueType>& rhs) const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
+		return value > rhs.value;
+	}
 
 	template<typename RHSUnit, typename RHSValueType>
-    constexpr bool operator>=(const quantity<RHSUnit, RHSValueType>& rhs) const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
-        return value >= rhs.value;
-    }
+	constexpr bool operator<=(const quantity<RHSUnit, RHSValueType>& rhs) const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
+		return value <= rhs.value;
+	}
 
-    template<typename RHSUnit, typename RHSValueType>
-    constexpr auto operator+(const quantity<RHSUnit, RHSValueType>& rhs) -> quantity<Unit, typename std::remove_cv<decltype(value + rhs.value)>::type> const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot add different units together.");
-        return quantity<Unit, typename std::remove_cv<decltype(value + rhs.value)>::type>(value + rhs.value);
-    }
+	template<typename RHSUnit, typename RHSValueType>
+	constexpr bool operator>=(const quantity<RHSUnit, RHSValueType>& rhs) const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot compare different units.");
+		return value >= rhs.value;
+	}
 
-    template<typename RHSUnit, typename RHSValueType>
-    constexpr auto operator-(const quantity<RHSUnit, RHSValueType>& rhs) -> quantity<Unit, typename std::remove_cv<decltype(value - rhs.value)>::type> const {
-        static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot subtract different units together.");
-        return quantity<Unit, typename std::remove_cv<decltype(value - rhs.value)>::type>(value - rhs.value);
-    }
+	template<typename RHSUnit, typename RHSValueType>
+	constexpr auto operator+(const quantity<RHSUnit, RHSValueType>& rhs) -> quantity<Unit, typename std::remove_cv<decltype(value + rhs.value)>::type> const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot add different units together.");
+		return quantity<Unit, typename std::remove_cv<decltype(value + rhs.value)>::type>(value + rhs.value);
+	}
 
-    template<typename RHSUnit, typename RHSValueType>
-    constexpr auto operator*(const quantity<RHSUnit, RHSValueType>& rhs) const -> quantity<typename Unit::template mul<RHSUnit>, typename std::remove_cv<decltype(value * rhs.value)>::type> {
-        return quantity<typename Unit::template mul<RHSUnit>, typename std::remove_cv<decltype(value * rhs.value)>::type>(value * rhs.value);
-    }
+	template<typename RHSUnit, typename RHSValueType>
+	constexpr auto operator-(const quantity<RHSUnit, RHSValueType>& rhs) -> quantity<Unit, typename std::remove_cv<decltype(value - rhs.value)>::type> const {
+		static_assert(Unit::template equal<RHSUnit>::value == true, "Cannot subtract different units together.");
+		return quantity<Unit, typename std::remove_cv<decltype(value - rhs.value)>::type>(value - rhs.value);
+	}
 
-    template<typename RHSUnit, typename RHSValueType>
-    constexpr auto operator/(const quantity<RHSUnit, RHSValueType>& rhs) const -> quantity<typename Unit::template div<RHSUnit>, typename std::remove_cv<decltype(value / rhs.value)>::type> {
-        return quantity<typename Unit::template div<RHSUnit>, typename std::remove_cv<decltype(value / rhs.value)>::type>(value / rhs.value);
-    }
+	template<typename RHSUnit, typename RHSValueType>
+	constexpr auto operator*(const quantity<RHSUnit, RHSValueType>& rhs) const -> quantity<typename Unit::template mul<RHSUnit>, typename std::remove_cv<decltype(value * rhs.value)>::type> {
+		return quantity<typename Unit::template mul<RHSUnit>, typename std::remove_cv<decltype(value * rhs.value)>::type>(value * rhs.value);
+	}
 
-    template<typename RHSDimTuple, intmax_t RHSExpNum, intmax_t RHSExpDen>
-    constexpr auto operator*(const unit<RHSDimTuple, RHSExpNum, RHSExpDen>& rhs) -> quantity<typename Unit::template mul<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType> const {
-        return quantity<typename Unit::template mul<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType>(value);
-    }
+	template<typename RHSUnit, typename RHSValueType>
+	constexpr auto operator/(const quantity<RHSUnit, RHSValueType>& rhs) const -> quantity<typename Unit::template div<RHSUnit>, typename std::remove_cv<decltype(value / rhs.value)>::type> {
+		return quantity<typename Unit::template div<RHSUnit>, typename std::remove_cv<decltype(value / rhs.value)>::type>(value / rhs.value);
+	}
 
-    template<typename RHSDimTuple, intmax_t RHSExpNum, intmax_t RHSExpDen>
-    constexpr auto operator/(const unit<RHSDimTuple, RHSExpNum, RHSExpDen>& rhs) -> quantity<typename Unit::template mul<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType> const {
-        return quantity<typename Unit::template div<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType>(value);
-    }
+	template<typename RHSDimTuple, intmax_t RHSExpNum, intmax_t RHSExpDen>
+	constexpr auto operator*(const unit<RHSDimTuple, RHSExpNum, RHSExpDen>& rhs) -> quantity<typename Unit::template mul<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType> const {
+		return quantity<typename Unit::template mul<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType>(value);
+	}
+
+	template<typename RHSDimTuple, intmax_t RHSExpNum, intmax_t RHSExpDen>
+	constexpr auto operator/(const unit<RHSDimTuple, RHSExpNum, RHSExpDen>& rhs) -> quantity<typename Unit::template mul<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType> const {
+		return quantity<typename Unit::template div<unit<RHSDimTuple, RHSExpNum, RHSExpDen>>, ValueType>(value);
+	}
 
 };
 
@@ -348,22 +348,22 @@ using enforce_undimensioned = typename std::enable_if<is_undimensioned<T>::value
 
 template<typename RHSDimTuple, intmax_t RHSScaleNum, intmax_t RHScaleDen, typename ValueType, typename = enforce_undimensioned<ValueType>>
 constexpr auto operator*(const ValueType& lhs, const unit<RHSDimTuple, RHSScaleNum, RHScaleDen>& rhs) -> quantity<unit<RHSDimTuple, RHSScaleNum, RHScaleDen>, ValueType> {
-    return quantity<unit<RHSDimTuple, RHSScaleNum, RHScaleDen>, ValueType>(lhs);
+	return quantity<unit<RHSDimTuple, RHSScaleNum, RHScaleDen>, ValueType>(lhs);
 }
 
 template<typename RHSDimTuple, intmax_t RHSScaleNum, intmax_t RHSScaleDen, typename ValueType, typename = enforce_undimensioned<ValueType>>
 constexpr auto operator/(const ValueType& lhs, const unit<RHSDimTuple, RHSScaleNum, RHSScaleDen>& rhs) -> quantity<typename unit<RHSDimTuple, RHSScaleNum, RHSScaleDen>::template power<-1>, ValueType> {
-    return quantity<typename unit<RHSDimTuple, RHSScaleNum, RHSScaleDen>::template power<-1>, ValueType>(lhs);
+	return quantity<typename unit<RHSDimTuple, RHSScaleNum, RHSScaleDen>::template power<-1>, ValueType>(lhs);
 }
 
 template<typename RHSUnit, typename ValueType, typename = enforce_undimensioned<ValueType>>
 constexpr auto operator*(const ValueType& lhs, const quantity<RHSUnit, ValueType>& rhs) -> quantity<RHSUnit, ValueType> {
-    return quantity<RHSUnit, ValueType>(lhs * rhs.value);
+	return quantity<RHSUnit, ValueType>(lhs * rhs.value);
 }
 
 template<typename RHSUnit, typename ValueType, typename = enforce_undimensioned<ValueType>>
 constexpr auto operator/(const ValueType& lhs, const quantity<RHSUnit, ValueType>& rhs) -> quantity<RHSUnit, ValueType> {
-    return quantity<RHSUnit, ValueType>(lhs / rhs.value);
+	return quantity<RHSUnit, ValueType>(lhs / rhs.value);
 }
 
 
