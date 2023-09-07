@@ -73,29 +73,29 @@ namespace si {
 	UNITS_SI_DECLARE_PREFIX(zepto, -21);
 	UNITS_SI_DECLARE_PREFIX(yocto, -24);
 
-	// UNITS_SI_DECLARE_DERIVED(radian,    meter / meter);
-	// UNITS_SI_DECLARE_DERIVED(steradian, meter.pow<2> / meter.pow<2>)
+	UNITS_SI_DECLARE_DERIVED(radian,    meter / meter);
+	UNITS_SI_DECLARE_DERIVED(steradian, meter.pow<2> / meter.pow<2>)
 	UNITS_SI_DECLARE_DERIVED(hertz,     second.pow<-1>);
 	UNITS_SI_DECLARE_DERIVED(newton,    kilogram * meter / second.pow<2>);
-	// UNITS_SI_DECLARE_DERIVED(pascal,    newton / meter.pow<2>);
-	// UNITS_SI_DECLARE_DERIVED(joule,     newton * meter);
-	// UNITS_SI_DECLARE_DERIVED(watt,      joule / second);
-	// UNITS_SI_DECLARE_DERIVED(coulomb,   ampere * second);
-	// UNITS_SI_DECLARE_DERIVED(volt,      joule / coulomb);
-	// UNITS_SI_DECLARE_DERIVED(farad,     coulomb / volt);
-	// UNITS_SI_DECLARE_DERIVED(ohm,       volt / ampere);
-	// UNITS_SI_DECLARE_DERIVED(siemen,    dimensionless / ohm);
-	// UNITS_SI_DECLARE_DERIVED(weber,     joule / ampere);
-	// UNITS_SI_DECLARE_DERIVED(tesla,     volt * second / meter.pow<2>);
-	// UNITS_SI_DECLARE_DERIVED(henry,     volt * second / ampere);
-	// UNITS_SI_DECLARE_DERIVED(lumen,     candela * steradian);
-	// UNITS_SI_DECLARE_DERIVED(lux,       lumen / meter.pow<2>);
-	// UNITS_SI_DECLARE_DERIVED(gray,      joule / kilogram);
-	// UNITS_SI_DECLARE_DERIVED(sievert,   joule / kilogram);
-	// UNITS_SI_DECLARE_DERIVED(katal,     mole / second);
+	UNITS_SI_DECLARE_DERIVED(pascal,    newton / meter.pow<2>);
+	UNITS_SI_DECLARE_DERIVED(joule,     newton * meter);
+	UNITS_SI_DECLARE_DERIVED(watt,      joule / second);
+	UNITS_SI_DECLARE_DERIVED(coulomb,   ampere * second);
+	UNITS_SI_DECLARE_DERIVED(volt,      joule / coulomb);
+	UNITS_SI_DECLARE_DERIVED(farad,     coulomb / volt);
+	UNITS_SI_DECLARE_DERIVED(ohm,       volt / ampere);
+	UNITS_SI_DECLARE_DERIVED(siemen,    dimensionless / ohm);
+	UNITS_SI_DECLARE_DERIVED(weber,     joule / ampere);
+	UNITS_SI_DECLARE_DERIVED(tesla,     volt * second / meter.pow<2>);
+	UNITS_SI_DECLARE_DERIVED(henry,     volt * second / ampere);
+	UNITS_SI_DECLARE_DERIVED(lumen,     candela * steradian);
+	UNITS_SI_DECLARE_DERIVED(lux,       lumen / meter.pow<2>);
+	UNITS_SI_DECLARE_DERIVED(gray,      joule / kilogram);
+	UNITS_SI_DECLARE_DERIVED(sievert,   joule / kilogram);
+	UNITS_SI_DECLARE_DERIVED(katal,     mole / second);
 
-	// UNITS_SI_DECLARE_DERIVED(bar,   hecto * kilo * pascal);
-	// UNITS_SI_DECLARE_DERIVED(gram,  milli * kilogram);
+	UNITS_SI_DECLARE_DERIVED(bar,   hecto * kilo * pascal);
+	UNITS_SI_DECLARE_DERIVED(gram,  milli * kilogram);
 
 }
 
@@ -119,19 +119,19 @@ namespace test {
 	static_assert(unt::dim_cmp<base_dim::second, base_dim::second>::eq == true,  "");
 	static_assert(unt::dim_cmp<base_dim::second, base_dim::second>::ne == false, "");
 
-
-	// static_assert(kilogram == kilo * gram, "");
+	static_assert(kilogram == kilo * gram, "");
 
 
 	using namespace si::instances;
-	// constexpr unt::quantity<units::meter, double> displacement = 0.5;
-	// constexpr unt::quantity<units::second, double> time = 2.0;
+	constexpr unt::quantity<units::meter, double> displacement = 0.5;
+	constexpr unt::quantity<units::second, double> time = 2.0;
 
-	// constexpr auto velocity = displacement / time;
+	constexpr auto velocity = displacement / time;
 
-	// constexpr auto length = 40 * centi * meter;
-	// static_assert(std::is_same<unt::quantity<decltype(centi * meter)::type, int>, decltype(length)::type>::value,"");
+	constexpr auto length = 40 * centi * meter;
+	static_assert(std::is_same<unt::quantity<decltype(centi * meter)::type, int>, decltype(length)::type>::value,"");
 
+	// Not possible yet
 	// static_assert(2 * meter < 300 * centi * meter, "");
 
 }

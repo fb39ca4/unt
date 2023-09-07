@@ -165,11 +165,11 @@ using dim_set_mul = typename dim_set_mul_helper<SetA, SetB>::result;
 template<typename DimSet, intmax_t ScaleExpNum = 0, intmax_t ScaleExpDen = 1>
 struct unit;
 
-template<typename... T>
+template<typename T>
 struct is_unit : std::false_type {};
 
-template<typename... T>
-struct is_unit<unit<T...>> : std::true_type {};
+template<typename DimSet, intmax_t ScaleExpNum, intmax_t ScaleExpDen>
+struct is_unit<unit<DimSet, ScaleExpNum, ScaleExpDen>> : std::true_type {};
 
 template<typename T>
 using enforce_unit = typename std::enable_if<is_unit<T>::value, T>::type;
@@ -334,8 +334,8 @@ struct quantity {
 template<typename... T>
 struct is_quantity : std::false_type {};
 
-template<typename... T>
-struct is_quantity<quantity<T...>> : std::true_type{};
+template<typename Unit, typename ValueType>
+struct is_quantity<quantity<Unit, ValueType>> : std::true_type{};
 
 template<typename T>
 using enforce_quantity = typename std::enable_if<is_quantity<T>::value, T>::type;
